@@ -191,9 +191,6 @@
 - `include/Account.h`, `src/Account.cpp` - счет и история операций.
 
 ## Сборка и запуск
-
-Сборка выполняется из корня проекта:
-
 ```bash
 rm -rf build && cmake -B build && cmake --build build && ./build/project_bank
 ```

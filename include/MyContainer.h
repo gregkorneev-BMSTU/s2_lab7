@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cstddef>
 #include <iterator>
 #include <new>
@@ -90,6 +91,10 @@ private:
         }
 
         difference_type operator-(const BasicIterator& other) const {
+            assert(container_ == other.container_);
+            if (container_ != other.container_) {
+                return 0;
+            }
             return static_cast<difference_type>(index_) -
                    static_cast<difference_type>(other.index_);
         }
@@ -107,6 +112,9 @@ private:
         }
 
         bool operator<(const BasicIterator& other) const {
+            if (container_ != other.container_) {
+                return false;
+            }
             return index_ < other.index_;
         }
 

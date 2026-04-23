@@ -9,6 +9,7 @@
 template<typename T>
 class MyContainer {
 private:
+    // Данные хранятся блоками фиксированного размера, а не одним сплошным массивом.
     static constexpr std::size_t kBlockSize = 16;
     using Storage = typename std::aligned_storage<sizeof(T), alignof(T)>::type;
 
@@ -178,11 +179,8 @@ public:
             return *this;
         }
 
-        clear();
-        reserve(other.size_);
-        for (std::size_t i = 0; i < other.size_; ++i) {
-            push_back(other[i]);
-        }
+        MyContainer temp(other);
+        swap(temp);
         return *this;
     }
 
@@ -347,6 +345,10 @@ public:
         std::swap(blockCapacity_, other.blockCapacity_);
     }
 
+    friend void swap(MyContainer& left, MyContainer& right) noexcept {
+        left.swap(right);
+    }
+
 private:
     static std::size_t blocksForCapacity(std::size_t capacity) {
         return (capacity + kBlockSize - 1) / kBlockSize;
@@ -375,10 +377,7 @@ private:
             newBlockCapacity *= 2;
         }
 
-        Storage** newBlocks = new Storage*[newBlockCapacity];
-        for (std::size_t i = 0; i < newBlockCapacity; ++i) {
-            newBlocks[i] = nullptr;
-        }
+        Storage** newBlocks = new Storage*[newBlockCapacity]();
 
         for (std::size_t i = 0; i < blockCount_; ++i) {
             newBlocks[i] = blocks_[i];

@@ -259,6 +259,8 @@ int main() {
 
     printSection("1. РАБОТА С КОЛЛЕКЦИЕЙ ОТДЕЛЕНИЙ");
     printInfo("В банке используется собственная коллекция MyContainer<Department>.");
+    printInfo("Для лабораторной 7 внешний интерфейс контейнера сохранен, "
+              "но внутри данные хранятся блоками.");
     printDepartments(bank);
 
     Department searchDepartment("Северное", "Москва, ул. Лобненская, 12");
@@ -363,6 +365,19 @@ int main() {
     std::cout << "Коды после сортировки: ";
     for (auto it = dailyCodes.begin(); it != dailyCodes.end(); ++it) {
         std::cout << *it << ' ';
+    }
+    std::cout << '\n';
+
+    auto foundCode = std::find(dailyCodes.begin(), dailyCodes.end(), 20);
+    if (foundCode != dailyCodes.end()) {
+        std::cout << "Код 20 найден через std::find и удален через erase().\n";
+        dailyCodes.erase(foundCode);
+    }
+
+    MyContainer<int> copiedCodes = dailyCodes;
+    std::cout << "Коды в копии контейнера: ";
+    for (const int code : copiedCodes) {
+        std::cout << code << ' ';
     }
     std::cout << '\n';
 
